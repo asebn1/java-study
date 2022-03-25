@@ -15,18 +15,16 @@ import java.util.stream.Stream;
 public class StreamStudy {
 
     public static long countWords() throws IOException {
-        String contents = Files.readString(Paths
-            .get("src/main/resources/fp/war-and-peace.txt"));
-        List<String> words = Arrays.asList(contents.split("[\\P{L}]+"));
-
-        return words.stream()
+        return Arrays.stream(Files.readString(Paths
+                                .get("src/main/resources/fp/war-and-peace.txt"))
+                        .split("[\\P{L}]+"))
                 .filter(word -> word.length() > 12)
                 .count();
     }
 
     public static List<Integer> doubleNumbers(List<Integer> numbers) {
         return numbers.stream()
-                .map(x -> x*2)
+                .map(x -> x * 2)
                 .collect(Collectors.toList());
     }
 
@@ -43,19 +41,15 @@ public class StreamStudy {
 
     public static void printLongestWordTop100() throws IOException {
         String contents = Files.readString(Paths
-            .get("src/main/resources/fp/war-and-peace.txt"));
+                .get("src/main/resources/fp/war-and-peace.txt"));
         List<String> words = Arrays.asList(contents.split("[\\P{L}]+"));
 
-        System.out.println(words);
-        System.out.println(words.size());
-
-        List<String> top100Words = words.stream()
+        words.stream()
                 .filter(word -> word.length() > 12)
-                .sorted(Comparator.reverseOrder())
+                .sorted(Comparator.comparing(String::length).reversed())
                 .distinct()
                 .map(word -> word.toLowerCase())
                 .limit(100)
-                .collect(Collectors.toList());
-        System.out.println(top100Words);
+                .forEach(System.out::println);
     }
 }
